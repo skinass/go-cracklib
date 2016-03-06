@@ -3,15 +3,19 @@
 package cracklib
 
 // #cgo LDFLAGS: -lcrack
+// #include <stdlib.h>
 // #include <crack.h>
 import "C"
+import "unsafe"
 
 // FascistCheck checks a potential password for guessability
 // It returns an error message and a boolean value
 // The error message will be "" if ok is true
 func FascistCheck(pw string) (message string, ok bool) {
 	path := C.GetDefaultCracklibDict()
-	v := C.FascistCheck(C.CString(pw), path)
+	pwptr := C.CString(pw)
+	defer C.free(unsafe.Pointer(pwptr))
+	v := C.FascistCheck(pwptr, path)
 	message = C.GoString(v)
 	if message != "" {
 		return message, false
@@ -24,7 +28,11 @@ func FascistCheck(pw string) (message string, ok bool) {
 // The error message will be "" if ok is true
 func FascistCheckUser(pw string, user string) (message string, ok bool) {
 	path := C.GetDefaultCracklibDict()
-	v := C.FascistCheckUser(C.CString(pw), path, C.CString(user), nil)
+	pwptr := C.CString(pw)
+	defer C.free(unsafe.Pointer(pwptr))
+	userptr := C.CString(user)
+	defer C.free(unsafe.Pointer(userptr))
+	v := C.FascistCheckUser(pwptr, path, userptr, nil)
 	message = C.GoString(v)
 	if message != "" {
 		return message, false
