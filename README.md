@@ -17,11 +17,7 @@ Linux Debian / Ubuntu
 `apt-get install cracklib-dev`
 
 ```
-go get github.com/taganaka/go-cracklib
-cd $GOPATH/src/github.com/taganaka/go-cracklib/samples
+go get github.com/skinass/go-cracklib
+cd $GOPATH/src/github.com/skinass/go-cracklib/samples
 go run cracklib-ckeck.go
 ```
-
-### Author:
-
-Francesco Laurita <https://github.com/taganaka>
