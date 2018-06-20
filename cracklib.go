@@ -25,25 +25,6 @@ func FascistCheck(pw, path string) (message string, ok bool) {
 	return "", true
 }
 
-// FascistCheckUser executes tests against an arbitrary user
-// It returns an error message and a boolean value
-// The error message will be "" if ok is true
-func FascistCheckUser(pw, user, path string) (message string, ok bool) {
-	pathptr := C.CString(path)
-	pwptr := C.CString(pw)
-	userptr := C.CString(user)
-	defer C.free(unsafe.Pointer(pathptr))
-	defer C.free(unsafe.Pointer(pwptr))
-	defer C.free(unsafe.Pointer(userptr))
-
-	v := C.FascistCheckUser(pwptr, pathptr, userptr, nil)
-	message = C.GoString(v)
-	if message != "" {
-		return message, false
-	}
-	return "", true
-}
-
 // FascistCheckDefault checks a potential password for guessability
 // It returns an error message and a boolean value
 // The error message will be "" if ok is true
@@ -61,28 +42,7 @@ func FascistCheckDefault(pw string) (message string, ok bool) {
 	return "", true
 }
 
-// FascistCheckUserDefault executes tests against an arbitrary user
-// It returns an error message and a boolean value
-// The error message will be "" if ok is true
-func FascistCheckUserDefault(pw string, user string) (message string, ok bool) {
-	pathptr := C.GetDefaultCracklibDict()
-
-	pwptr := C.CString(pw)
-	userptr := C.CString(user)
-	defer C.free(unsafe.Pointer(pathptr))
-	defer C.free(unsafe.Pointer(pwptr))
-
-	v := C.FascistCheckUser(pwptr, pathptr, userptr, nil)
-	message = C.GoString(v)
-	if message != "" {
-		return message, false
-	}
-	return "", true
-}
-
 // extern const char *FascistCheck(const char *pw, const char *dictpath);
-// extern const char *FascistCheckUser(const char *pw, const char *dictpath,
-// 				    const char *user, const char *gecos);
 //
 // /* This function returns the compiled in value for DEFAULT_CRACKLIB_DICT.
 //  */

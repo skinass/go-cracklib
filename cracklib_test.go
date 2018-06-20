@@ -22,12 +22,3 @@ func TestFascistCheckDefault(t *testing.T) {
 		}
 	}
 }
-
-func TestFascistCheckUserDefault(t *testing.T) {
-	for _, tt := range testFascistCheck {
-		_, ok := FascistCheckUserDefault(tt.pw, "foobar")
-		if ok != tt.expected {
-			t.Errorf("FascistCheck(%s): expected %t, actual %t", tt.pw, tt.expected, ok)
-		}
-	}
-}
