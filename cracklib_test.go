@@ -14,7 +14,7 @@ var testFascistCheck = []struct {
 	{"!!%6AsdfGhjLlojj", true},
 }
 
-func TestFascistCheck(t *testing.T) {
+func TestFascistCheckDefault(t *testing.T) {
 	for _, tt := range testFascistCheck {
 		_, ok := FascistCheckDefault(tt.pw)
 		if ok != tt.expected {
@@ -23,7 +23,7 @@ func TestFascistCheck(t *testing.T) {
 	}
 }
 
-func TestFascistCheckUser(t *testing.T) {
+func TestFascistCheckUserDefault(t *testing.T) {
 	for _, tt := range testFascistCheck {
 		_, ok := FascistCheckUserDefault(tt.pw, "foobar")
 		if ok != tt.expected {
