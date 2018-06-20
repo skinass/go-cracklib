@@ -11,11 +11,13 @@ import "unsafe"
 // FascistCheck checks a potential password for guessability
 // It returns an error message and a boolean value
 // The error message will be "" if ok is true
-func FascistCheck(pw string) (message string, ok bool) {
-	path := C.GetDefaultCracklibDict()
+func FascistCheck(pw, path string) (message string, ok bool) {
+	pathptr := C.CString(path)
 	pwptr := C.CString(pw)
+	defer C.free(unsafe.Pointer(pathptr))
 	defer C.free(unsafe.Pointer(pwptr))
-	v := C.FascistCheck(pwptr, path)
+
+	v := C.FascistCheck(pwptr, pathptr)
 	message = C.GoString(v)
 	if message != "" {
 		return message, false
@@ -26,13 +28,51 @@ func FascistCheck(pw string) (message string, ok bool) {
 // FascistCheckUser executes tests against an arbitrary user
 // It returns an error message and a boolean value
 // The error message will be "" if ok is true
-func FascistCheckUser(pw string, user string) (message string, ok bool) {
-	path := C.GetDefaultCracklibDict()
+func FascistCheckUser(pw, user, path string) (message string, ok bool) {
+	pathptr := C.CString(path)
+	pwptr := C.CString(pw)
+	userptr := C.CString(user)
+	defer C.free(unsafe.Pointer(pathptr))
+	defer C.free(unsafe.Pointer(pwptr))
+	defer C.free(unsafe.Pointer(userptr))
+
+	v := C.FascistCheckUser(pwptr, pathptr, userptr, nil)
+	message = C.GoString(v)
+	if message != "" {
+		return message, false
+	}
+	return "", true
+}
+
+// FascistCheckDefault checks a potential password for guessability
+// It returns an error message and a boolean value
+// The error message will be "" if ok is true
+func FascistCheckDefault(pw string) (message string, ok bool) {
+	pathptr := C.GetDefaultCracklibDict()
+
 	pwptr := C.CString(pw)
 	defer C.free(unsafe.Pointer(pwptr))
+
+	v := C.FascistCheck(pwptr, pathptr)
+	message = C.GoString(v)
+	if message != "" {
+		return message, false
+	}
+	return "", true
+}
+
+// FascistCheckUserDefault executes tests against an arbitrary user
+// It returns an error message and a boolean value
+// The error message will be "" if ok is true
+func FascistCheckUserDefault(pw string, user string) (message string, ok bool) {
+	pathptr := C.GetDefaultCracklibDict()
+
+	pwptr := C.CString(pw)
 	userptr := C.CString(user)
-	defer C.free(unsafe.Pointer(userptr))
-	v := C.FascistCheckUser(pwptr, path, userptr, nil)
+	defer C.free(unsafe.Pointer(pathptr))
+	defer C.free(unsafe.Pointer(pwptr))
+
+	v := C.FascistCheckUser(pwptr, pathptr, userptr, nil)
 	message = C.GoString(v)
 	if message != "" {
 		return message, false

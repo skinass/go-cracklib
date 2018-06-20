@@ -16,7 +16,7 @@ var testFascistCheck = []struct {
 
 func TestFascistCheck(t *testing.T) {
 	for _, tt := range testFascistCheck {
-		_, ok := FascistCheck(tt.pw)
+		_, ok := FascistCheckDefault(tt.pw)
 		if ok != tt.expected {
 			t.Errorf("FascistCheck(%s): expected %t, actual %t", tt.pw, tt.expected, ok)
 		}
@@ -25,7 +25,7 @@ func TestFascistCheck(t *testing.T) {
 
 func TestFascistCheckUser(t *testing.T) {
 	for _, tt := range testFascistCheck {
-		_, ok := FascistCheckUser(tt.pw, "foobar")
+		_, ok := FascistCheckUserDefault(tt.pw, "foobar")
 		if ok != tt.expected {
 			t.Errorf("FascistCheck(%s): expected %t, actual %t", tt.pw, tt.expected, ok)
 		}

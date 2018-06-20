@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/taganaka/go-cracklib"
+	cracklib "github.com/skinass/go-cracklib"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 		fmt.Printf("Usage: %s <password>\n", os.Args[0])
 		os.Exit(-1)
 	}
-	if message, ok := cracklib.FascistCheck(os.Args[1]); !ok {
+	if message, ok := cracklib.FascistCheckDefault(os.Args[1]); !ok {
 		fmt.Println(message)
 		os.Exit(-1)
 	} else {
